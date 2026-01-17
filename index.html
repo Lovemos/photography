@@ -130,3 +130,30 @@ layout: default
         </div>
     </footer>
 </div>
+<!-- 动效注入脚本 -->
+<script>
+    const revealImages = () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // 增加一点点交错加载的延迟感
+                    setTimeout(() => {
+                        entry.target.classList.add('revealed');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('#main .thumb').forEach(img => {
+            observer.observe(img);
+        });
+    };
+
+    // 确保在页面加载后运行
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', revealImages);
+    } else {
+        revealImages();
+    }
+</script>
